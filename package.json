@@ -1,0 +1,24 @@
+{
+  "name": "heat_iot_server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.10.0",
+    "dotenv": "^17.2.0",
+    "mqtt": "^5.13.2",
+    "node-cron": "^4.2.1",
+    "sqlite3": "^5.1.7"
+  },
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^3.1.10",
+    "prettier": "^3.6.2"
+  }
+}
