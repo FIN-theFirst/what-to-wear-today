@@ -20,6 +20,7 @@ fetchWeather().then(weatherByDay => {
 
 
 
+
     // console.log(`📆 ${date}: ${rec}`);
   }
 });

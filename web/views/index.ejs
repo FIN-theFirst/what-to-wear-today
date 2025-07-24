@@ -1,36 +1,176 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Kleiderprofil</title>
+  <title>Clothing Profil</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    .icon-label {
+      cursor: pointer;
+      border: 2px solid transparent;
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+      transition: border-color 0.2s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .icon-label input[type="checkbox"] {
+      display: none;
+    }
+
+    .icon-label img {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      margin-bottom: 0.5rem;
+    }
+
+    .icon-label input[type="checkbox"]:checked+img {
+      border: 2px solid #0d6efd;
+      border-radius: 0.5rem;
+      padding: 0.25rem;
+    }
+  </style>
 </head>
-<body class="p-3">
 
+<body class="bg-light p-3">
   <div class="container">
-    <h1 class="mb-4">👕 Dein Kleiderprofil</h1>
+    <h1 class="mb-4 text-center">Your Clothing Profil</h1>
 
-    <form action="/save-profile" method="POST">
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="hasHat" id="hat">
-        <label class="form-check-label" for="hat">🧢 Ich trage gerne Mütze/Kappe</label>
+    <form method="POST" action="/save-profile">
+      <div class="row row-cols-3 row-cols-sm-4 g-3 justify-content-center">
+
+        <!-- 🧢 Kappe -->
+        <label class="icon-label col text-center">
+          <input type="checkbox" name="hasCap" id="hasCap">
+          <img src="/icons/cap.svg" alt="Kappe">
+          <div>Kappe</div>
+        </label>
+
+        <!-- 🧶 Mütze -->
+        <label class="icon-label col text-center">
+          <input type="checkbox" name="hasBeanie" id="hasBeanie">
+          <img src="/icons/beanie.svg" alt="Mütze">
+          <div>Mütze</div>
+        </label>
+
+        <!-- 👕 T-Shirt -->
+        <label class="icon-label col text-center">
+          <input type="checkbox" name="hasTShirt" id="hasTShirt">
+          <img src="/icons/tshirt.svg" alt="T-Shirt">
+          <div>T-Shirt</div>
+        </label>
+
+        <!-- 👔 Langarmshirt -->
+        <label class="icon-label col text-center">
+          <input type="checkbox" name="hasLongShirt" id="hasLongShirt">
+          <img src="/icons/longsleeve.svg" alt="Langarmshirt">
+          <div>Langarm</div>
+        </label>
+
+        <!-- 🧥 Hoodie -->
+        <label class="icon-label col text-center">
+          <input type="checkbox" name="hasHoodie" id="hasHoodie">
+          <img src="/icons/hoodie.svg" alt="Hoodie">
+          <div>Hoodie</div>
+        </label>
+
+        <!-- 🌧️ Regenjacke -->
+        <label class="icon-label col text-center">
+          <input type="checkbox" name="hasRainJacket" id="hasRainJacket">
+          <img src="/icons/rainjacket.svg" alt="Regenjacke">
+          <div>Regenjacke</div>
+        </label>
+
+        <!-- ❄️ Winterjacke -->
+        <label class="icon-label col text-center">
+          <input type="checkbox" name="hasWinterJacket" id="hasWinterJacket">
+          <img src="/icons/wintercoat.svg" alt="Winterjacke">
+          <div>Winterjacke</div>
+        </label>
+
+        <!-- 🌬️ Übergangsjacke -->
+        <label class="icon-label col text-center">
+          <input type="checkbox" name="hasLightJacket" id="hasLightJacket">
+          <img src="/icons/lightjacket.svg" alt="Übergangsjacke">
+          <div>Übergangsjacke</div>
+        </label>
+
+        <!-- 👖 Lange Hose -->
+        <label class="icon-label col text-center">
+          <input type="checkbox" name="hasLongPants" id="hasLongPants">
+          <img src="/icons/pants.svg" alt="Lange Hose">
+          <div>Lange Hose</div>
+        </label>
+
+        <!-- 🩳 Kurze Hose -->
+        <label class="icon-label col text-center">
+          <input type="checkbox" name="hasShortPants" id="hasShortPants">
+          <img src="/icons/shorts.svg" alt="Kurze Hose">
+          <div>Kurze Hose</div>
+        </label>
+
+        <!-- 👟 Normale Schuhe -->
+        <label class="icon-label col text-center">
+          <input type="checkbox" name="hasShoes" id="hasShoes">
+          <img src="/icons/shoes.svg" alt="Schuhe">
+          <div>Schuhe</div>
+        </label>
+
+        <!-- 🥾 Warme Schuhe -->
+        <label class="icon-label col text-center">
+          <input type="checkbox" name="hasWarmShoes" id="hasWarmShoes">
+          <img src="/icons/boot.svg" alt="Warme Schuhe">
+          <div>Warme Schuhe</div>
+        </label>
+
+        <!-- 🩴 Offene Schuhe -->
+        <label class="icon-label col text-center">
+          <input type="checkbox" name="hasOpenShoes" id="hasOpenShoes">
+          <img src="/icons/sandals.svg" alt="Sandalen">
+          <div>Sandalen</div>
+        </label>
+
+        <!-- 🧤 Handschuhe -->
+        <label class="icon-label col text-center">
+          <input type="checkbox" name="hasGloves" id="hasGloves">
+          <img src="/icons/gloves.svg" alt="Handschuhe">
+          <div>Handschuhe</div>
+        </label>
+
+        <!-- 🧣 Schal -->
+        <label class="icon-label col text-center">
+          <input type="checkbox" name="hasScarf" id="hasScarf">
+          <img src="/icons/scarf.svg" alt="Schal">
+          <div>Schal</div>
+        </label>
+
+        <!-- ☂️ Regenschirm -->
+        <label class="icon-label col text-center">
+          <input type="checkbox" name="hasUmbrella" id="hasUmbrella">
+          <img src="/icons/umbrella.svg" alt="Regenschirm">
+          <div>Regenschirm</div>
+        </label>
+
+        <!-- 🕶️ Sonnenbrille -->
+        <label class="icon-label col text-center">
+          <input type="checkbox" name="hasSunglasses" id="hasSunglasses">
+          <img src="/icons/sunglasses.svg" alt="Sonnenbrille">
+          <div>Sonnenbrille</div>
+        </label>
+
       </div>
 
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="hasRaincoat" id="raincoat">
-        <label class="form-check-label" for="raincoat">🧥 Ich habe eine Regenjacke</label>
+      <div class="text-center mt-4">
+        <button type="submit" class="btn btn-primary">💾 Speichern</button>
       </div>
-
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="hasWarmShoes" id="warmShoes">
-        <label class="form-check-label" for="warmShoes">🥾 Ich trage warme Schuhe</label>
-      </div>
-
-      <button type="submit" class="btn btn-primary mt-3">💾 Speichern</button>
     </form>
   </div>
-
 </body>
-</html>
 
+</html>

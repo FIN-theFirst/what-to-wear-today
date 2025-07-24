@@ -1,40 +1,127 @@
 const express = require("express");
-const fs = require("fs");
 const path = require("path");
 const bodyParser = require("body-parser");
+const session = require("express-session");
+const { Pool } = require("pg");
+require("dotenv").config();
 
 const app = express();
 const port = 3000;
 
-// Middleware
+const db = new Pool({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
+});
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-// JSON-File
-const profilePath = path.join(__dirname, "userProfile.json");
 
-// Routen
-app.get("/", (req, res) => {
+app.get("/login", (req, res) => {
+  res.render("login", { error: null });
+});
+
+app.post("/login", (req, res) => {
+  const { username, password } = req.body;
+
+  if (username === "admin" && password === "1234") {
+    req.session.loggedIn = true;
+    req.session.userId = 1; // Test-Nutzer-ID
+    res.redirect("/");
+  } else {
+    res.render("login", { error: "Falscher Benutzername oder Passwort" });
+  }
+});
+
+function requireLogin(req, res, next) {
+  if (req.session.loggedIn) {
+    next();
+  } else {
+    res.redirect("/login");
+  }
+}
+
+app.get("/", requireLogin, async (req, res) => {
+  const userId = req.session.userId;
   let data = {};
   try {
-    data = JSON.parse(fs.readFileSync(profilePath));
-  } catch (e) { }
+    const result = await db.query(
+      "SELECT * FROM clothing_profile WHERE user_id = $1 LIMIT 1",
+      [userId]
+    );
+    if (result.rows.length > 0) {
+      data = result.rows[0];
+    }
+  } catch (err) {
+    console.error("Fehler beim Laden:", err);
+  }
+
   res.render("index", data);
 });
 
-app.post("/save-profile", (req, res) => {
+app.post("/save-profile", requireLogin, async (req, res) => {
+  const userId = req.session.userId;
+
   const profile = {
-    hasHat: !!req.body.hasHat,
-    hasRaincoat: !!req.body.hasRaincoat,
-    hasWarmShoes: !!req.body.hasWarmShoes,
+    has_cap: !!req.body.hasCap,
+    has_beanie: !!req.body.hasBeanie,
+    has_tshirt: !!req.body.hasTShirt,
+    has_longshirt: !!req.body.hasLongShirt,
+    has_hoodie: !!req.body.hasHoodie,
+    has_rainjacket: !!req.body.hasRainJacket,
+    has_winterjacket: !!req.body.hasWinterJacket,
+    has_lightjacket: !!req.body.hasLightJacket,
+    has_longpants: !!req.body.hasLongPants,
+    has_shortpants: !!req.body.hasShortPants,
+    has_shoes: !!req.body.hasShoes,
+    has_warmshoes: !!req.body.hasWarmShoes,
+    has_openshoes: !!req.body.hasOpenShoes,
+    has_gloves: !!req.body.hasGloves,
+    has_scarf: !!req.body.hasScarf,
+    has_umbrella: !!req.body.hasUmbrella,
+    has_sunglasses: !!req.body.hasSunglasses,
   };
-  fs.writeFileSync(profilePath, JSON.stringify(profile, null, 2));
-  res.redirect("/");
+
+  try {
+    await db.query("DELETE FROM clothing_profile WHERE user_id = $1", [userId]);
+
+    await db.query(
+      `
+      INSERT INTO clothing_profile (
+        user_id, has_cap, has_beanie, has_tshirt, has_longshirt,
+        has_hoodie, has_rainjacket, has_winterjacket, has_lightjacket,
+        has_longpants, has_shortpants, has_shoes, has_warmshoes, has_openshoes,
+        has_gloves, has_scarf, has_umbrella, has_sunglasses
+      ) VALUES (
+        $1, $2, $3, $4, $5,
+        $6, $7, $8, $9,
+        $10, $11, $12, $13, $14,
+        $15, $16, $17, $18
+      )
+      `,
+      [userId, ...Object.values(profile)]
+    );
+
+    res.redirect("/");
+  } catch (err) {
+    console.error("Fehler beim Speichern:", err);
+    res.status(500).send("❌ Fehler beim Speichern");
+  }
 });
 
 app.listen(port, () => {
   console.log(`🌐 Webinterface läuft auf http://localhost:${port}`);
 });
-
