@@ -7,13 +7,18 @@ fetchWeather().then(weatherByDay => {
     // console.log(weatherByDay[date]);
     // console.log(weatherByDay[date].date);
     // console.log("AvgTemp: " + weatherByDay[date].getAvgTemp());
-    // console.log("AvgApparentTemp: " + weatherByDay[date].getAvgApparentTemp())
     // console.log("AvgRainProb: " + weatherByDay[date].getAvgRainProbability());
     // console.log("windSpeed: " + weatherByDay[date].getAvgWindSpeed());
     // console.log("\n")
-    console.log("minTemp: " + weatherByDay[date].getMinTemp());
-    console.log("avgTemp: " + weatherByDay[date].getAvgTemp());
-    console.log("maxTemp: " + weatherByDay[date].getMaxTemp() + "\n");
+    // console.log("getAvgRainProbability " + weatherByDay[date].getAvgRainProbability());
+    // console.log("RainAmount: " + weatherByDay[date].getAvgRainAmount());
+    // console.log("rainScore: " + weatherByDay[date].getRainScore());
+    console.log("windScore: " + weatherByDay[date].getWindScore());
+    console.log("rainScore: " + weatherByDay[date].getRainScore());
+    console.log("coldScore: " + weatherByDay[date].getColdScore());
+    console.log("discomfortScore: " + weatherByDay[date].getDiscomfortScore());
+
+
 
     // console.log(`📆 ${date}: ${rec}`);
   }

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kleiderprofil</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="p-3">
+
+  <div class="container">
+    <h1 class="mb-4">👕 Dein Kleiderprofil</h1>
+
+    <form action="/save-profile" method="POST">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="hasHat" id="hat">
+        <label class="form-check-label" for="hat">🧢 Ich trage gerne Mütze/Kappe</label>
+      </div>
+
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="hasRaincoat" id="raincoat">
+        <label class="form-check-label" for="raincoat">🧥 Ich habe eine Regenjacke</label>
+      </div>
+
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="hasWarmShoes" id="warmShoes">
+        <label class="form-check-label" for="warmShoes">🥾 Ich trage warme Schuhe</label>
+      </div>
+
+      <button type="submit" class="btn btn-primary mt-3">💾 Speichern</button>
+    </form>
+  </div>
+
+</body>
+</html>
+
