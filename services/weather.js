@@ -49,36 +49,3 @@ async function fetchWeather() {
 module.exports = { fetchWeather };
 
 
-// const tempTimeArray = time.map((t, i) => {
-//   const [datePart, timePart] = t.split("T");
-//   const [year, month, day] = datePart.split("-");
-//   const dayOfYear = getDayOfYear(year, month, day);
-//   return {
-//     time: t,
-//     temperature: temperature_2m[i],
-//     dayOfYear: dayOfYear
-//   };
-// });
-//
-// function isLeapYear(year) {
-//   return (year % 4 === 0
-//     && year % 100 !== 0)
-//     || (year % 400 === 0);
-// }
-//
-// function getDayOfYear(year, month, day) {
-//   let daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-//   if (isLeapYear(Number(year))) {
-//     daysInMonth[1] = 29;
-//   }
-//   let dayOfYear = 0;
-//   for (let i = 0; i < Number(month) - 1; i++) {
-//     dayOfYear += daysInMonth[i];
-//   }
-//   dayOfYear += Number(day);
-//   return dayOfYear;
-// }
-// console.log(tempTimeArray);
-// function calcAvgTempOfDay(tempTimeArray, day) {
-// }
-
