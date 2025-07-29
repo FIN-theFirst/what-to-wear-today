@@ -80,6 +80,16 @@ app.get("/", requireLogin, async (req, res) => {
     if (result.rows.length > 0) {
       data = result.rows[0];
     }
+    const clothing_profile = await db.query(
+      `
+      SELECT * FROM clothing_profile WHERE user_id = $1
+      `,
+      [userId, ...Object.values(profile)]
+    );
+    console.log(clothing_profile);
+
+
+
   } catch (err) {
     console.error("Fehler beim Laden:", err);
   }
