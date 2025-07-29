@@ -47,14 +47,14 @@
 
         <!-- 🧢 Kappe -->
         <label class="icon-label col text-center">
-          <input type="checkbox" name="hasCap" id="hasCap">
+          <input type="checkbox" name="hasCap" <%=has_cap ? "checked" : "" %> id="hasCap">
           <img src="/icons/cap.svg" alt="Kappe">
           <div>Kappe</div>
         </label>
 
         <!-- 🧶 Mütze -->
         <label class="icon-label col text-center">
-          <input type="checkbox" name="hasBeanie" id="hasBeanie">
+          <input type="checkbox" name="hasBeanie" <%=has_beanie ? "checked" : "" %> id="hasBeanie">
           <img src="/icons/beanie.svg" alt="Mütze">
           <div>Mütze</div>
         </label>

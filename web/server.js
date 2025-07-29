@@ -71,25 +71,6 @@ function requireLogin(req, res, next) {
 
 
 app.get("/", requireLogin, async (req, res) => {
-  const profile = {
-    has_cap: !!req.body.hasCap,
-    has_beanie: !!req.body.hasBeanie,
-    has_tshirt: !!req.body.hasTShirt,
-    has_longshirt: !!req.body.hasLongShirt,
-    has_hoodie: !!req.body.hasHoodie,
-    has_rainjacket: !!req.body.hasRainJacket,
-    has_winterjacket: !!req.body.hasWinterJacket,
-    has_lightjacket: !!req.body.hasLightJacket,
-    has_longpants: !!req.body.hasLongPants,
-    has_shortpants: !!req.body.hasShortPants,
-    has_shoes: !!req.body.hasShoes,
-    has_warmshoes: !!req.body.hasWarmShoes,
-    has_openshoes: !!req.body.hasOpenShoes,
-    has_gloves: !!req.body.hasGloves,
-    has_scarf: !!req.body.hasScarf,
-    has_umbrella: !!req.body.hasUmbrella,
-    has_sunglasses: !!req.body.hasSunglasses,
-  };
   const userId = req.session.userId;
   let data = {};
   try {
@@ -100,14 +81,6 @@ app.get("/", requireLogin, async (req, res) => {
     if (result.rows.length > 0) {
       data = result.rows[0];
     }
-    const clothing_profile = await db.query(
-      `
-      SELECT * FROM clothing_profile WHERE user_id = $1
-      `,
-      [userId, ...Object.values(profile)]
-    );
-    console.log(clothing_profile);
-
   } catch (err) {
     console.error("Fehler beim Laden:", err);
   }
