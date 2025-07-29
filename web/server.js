@@ -1,4 +1,5 @@
 const express = require("express");
+const bcrypt = require("bcrypt");
 const path = require("path");
 const bodyParser = require("body-parser");
 const session = require("express-session");
@@ -34,14 +35,28 @@ app.get("/login", (req, res) => {
   res.render("login", { error: null });
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
   const { username, password } = req.body;
-  if (username === "admin" && password === "1234") {
+  try {
+    const result = await db.query(
+      "SELECT id, password_hash FORM users WHERE username = $1",
+      [username]
+    );
+    if (result.rows.length === 0) {
+      return res.render("login", { error: "Benutzer nicht gefunden" });
+    }
+    const user = result.rows[0];
+
+    const passwordMatch = await bcrypt.compare(password, user.password_hash);
+    if (!passwordMatch) {
+      return res.render("login", { error: "Falsches Passwort" });
+    }
     req.session.loggedIn = true;
-    req.session.userId = 1; // Test-Nutzer-ID
+    req.session.userId = user.id;
     res.redirect("/");
-  } else {
-    res.render("login", { error: "Falscher Benutzername oder Passwort" });
+  } catch (err) {
+    console.error("Fehler beim Login", err);
+    res.status(500).render("login", { error: "Interner Fehler" });
   }
 });
 
