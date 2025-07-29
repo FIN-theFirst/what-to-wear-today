@@ -37,9 +37,10 @@ app.get("/login", (req, res) => {
 
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
+  console.log("SQL Login Query:", username);
   try {
     const result = await db.query(
-      "SELECT id, password_hash FORM users WHERE username = $1",
+      "SELECT id, password_hash FROM users WHERE username = $1",
       [username]
     );
     if (result.rows.length === 0) {
