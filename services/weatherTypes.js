@@ -10,7 +10,6 @@ class WeatherSnapshot {
     this.uvIndex = uvIndex;
     this.hour = new Date(time).getHours();
   }
-
 }
 
 class WeatherDay {

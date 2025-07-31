@@ -1,5 +1,6 @@
 const { fetchWeather } = require("./services/weather");
 const { getClothingRecommendation } = require("./logic/recommendation");
+const { fetchClothingProfile } = require("./services/clothingProfile.js");
 
 fetchWeather().then(weatherByDay => {
   for (const date in weatherByDay) {
@@ -17,10 +18,6 @@ fetchWeather().then(weatherByDay => {
     console.log("rainScore: " + weatherByDay[date].getRainScore());
     console.log("coldScore: " + weatherByDay[date].getColdScore());
     console.log("discomfortScore: " + weatherByDay[date].getDiscomfortScore());
-
-
-
-
     // console.log(`📆 ${date}: ${rec}`);
   }
 });
