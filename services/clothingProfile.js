@@ -12,7 +12,8 @@ async function fetchClothingProfile(userId) {
     throw new Error('Error while fetching: ${res.statusText}'); kK: w
   }
   const data = await res.json();
-  return data;
+  const clothingProfile = new clothingProfile(data);
+  return clothingProfile;
 }
 module.exports = { fetchClothingProfile };
 
