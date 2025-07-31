@@ -37,27 +37,26 @@ app.get("/login", (req, res) => {
 
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
-  console.log("SQL Login Query:", username);
   try {
     const result = await db.query(
       "SELECT id, password_hash FROM users WHERE username = $1",
       [username]
     );
     if (result.rows.length === 0) {
-      return res.render("login", { error: "Benutzer nicht gefunden" });
+      return res.render("login", { error: "User not defined" });
     }
     const user = result.rows[0];
 
     const passwordMatch = await bcrypt.compare(password, user.password_hash);
     if (!passwordMatch) {
-      return res.render("login", { error: "Falsches Passwort" });
+      return res.render("login", { error: "Wrong Password" });
     }
     req.session.loggedIn = true;
     req.session.userId = user.id;
     res.redirect("/");
   } catch (err) {
-    console.error("Fehler beim Login", err);
-    res.status(500).render("login", { error: "Interner Fehler" });
+    console.error("Error while logging in", err);
+    res.status(500).render("login", { error: "Internal Error" });
   }
 });
 
@@ -68,7 +67,6 @@ function requireLogin(req, res, next) {
     res.redirect("/login");
   }
 }
-
 
 app.get("/", requireLogin, async (req, res) => {
   const userId = req.session.userId;
@@ -82,7 +80,7 @@ app.get("/", requireLogin, async (req, res) => {
       data = result.rows[0];
     }
   } catch (err) {
-    console.error("Fehler beim Laden:", err);
+    console.error("Error while loading", err);
   }
 
   res.render("index", data);
@@ -91,23 +89,23 @@ app.get("/", requireLogin, async (req, res) => {
 app.post("/save-profile", requireLogin, async (req, res) => {
   const userId = req.session.userId;
   const profile = {
-    has_cap: !!req.body.hasCap,
-    has_beanie: !!req.body.hasBeanie,
-    has_tshirt: !!req.body.hasTShirt,
-    has_longshirt: !!req.body.hasLongShirt,
-    has_hoodie: !!req.body.hasHoodie,
-    has_rainjacket: !!req.body.hasRainJacket,
-    has_winterjacket: !!req.body.hasWinterJacket,
-    has_lightjacket: !!req.body.hasLightJacket,
-    has_longpants: !!req.body.hasLongPants,
-    has_shortpants: !!req.body.hasShortPants,
-    has_shoes: !!req.body.hasShoes,
-    has_warmshoes: !!req.body.hasWarmShoes,
-    has_openshoes: !!req.body.hasOpenShoes,
-    has_gloves: !!req.body.hasGloves,
-    has_scarf: !!req.body.hasScarf,
-    has_umbrella: !!req.body.hasUmbrella,
-    has_sunglasses: !!req.body.hasSunglasses,
+    hasCap: req.body.hasCap,
+    hasBeanie: req.body.hasBeanie,
+    hasTShirt: req.body.hasTShirt,
+    hasLongShirt: req.body.hasLongShirt,
+    hasHoodie: req.body.hasHoodie,
+    hasRainJacket: req.body.hasRainJacket,
+    hasWinterJacket: req.body.hasWinterJacket,
+    hasLightJacket: req.body.hasLightJacket,
+    hasLongPants: req.body.hasLongPants,
+    hasShortPants: req.body.hasShortPants,
+    hasShoes: req.body.hasShoes,
+    hasWarmShoes: req.body.hasWarmShoes,
+    hasOpenShoes: req.body.hasOpenShoes,
+    hasGloves: req.body.hasGloves,
+    hasScarf: req.body.hasScarf,
+    hasUmbrella: req.body.hasUmbrella,
+    hasSunglasses: req.body.hasSunglasses,
   };
 
   try {
@@ -116,10 +114,10 @@ app.post("/save-profile", requireLogin, async (req, res) => {
     await db.query(
       `
       INSERT INTO clothing_profile (
-        user_id, has_cap, has_beanie, has_tshirt, has_longshirt,
-        has_hoodie, has_rainjacket, has_winterjacket, has_lightjacket,
-        has_longpants, has_shortpants, has_shoes, has_warmshoes, has_openshoes,
-        has_gloves, has_scarf, has_umbrella, has_sunglasses
+        user_id, hasCap, hasBeanie, hasTShirt, hasLongShirt,
+        hasHoodie, hasRainJacket, hasWinterJacket, hasLightJacket,
+        hasLongPants, hasShortPants, hasShoes, hasWarmShoes, hasOpenShoes,
+        hasGloves, hasScarf, hasUmbrella, hasSunglasses
       ) VALUES (
         $1, $2, $3, $4, $5,
         $6, $7, $8, $9,
@@ -132,11 +130,31 @@ app.post("/save-profile", requireLogin, async (req, res) => {
 
     res.redirect("/");
   } catch (err) {
-    console.error("Fehler beim Speichern:", err);
-    res.status(500).send("❌ Fehler beim Speichern");
+    console.error("Error while Saving", err);
+    res.status(500).send("❌ Error while Saving");
   }
 });
+app.get("/api/profile/:userId", async (req, res) => {
+  const auth = req.headers.authorization;
+  if (!auth || auth !== `Bearer ${process.env.INTERNAL_API_KEY}`) {
+    return res.status(403).json({ error: "Access Denied" });
+  }
+  const userId = parseInt(req.params.userId, 10);
+  try {
+    const result = await db.query(
+      "SELECT * FROM clothing_profile WHERE user_id = $1",
+      [userId]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Profile not Found" })
+    }
+    res.json(result.row[0]);
+  } catch (err) {
+    console.log("Error loading Profile via API", err);
+    return res.status(500).json({ error: "Internal Error" });
+  }
+})
 
 app.listen(port, () => {
-  console.log(`🌐 Webinterface läuft auf http://localhost:${port}`);
+  console.log(`🌐 Webinterface is running on http://localhost:${port}`);
 });
