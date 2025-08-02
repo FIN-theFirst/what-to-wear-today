@@ -10,7 +10,7 @@ async function fetchClothingProfile(userId) {
     }
   })
   if (!res.ok) {
-    throw new Error('Error while fetching: ${res.statusText}'); kK: w
+    throw new Error(`Error while fetching: ${res.statusText}`);
   }
   const data = await res.json();
   const ClothingProfile = new ClothingProfile(data);
