@@ -137,7 +137,7 @@ async function getClothingProfileByUserId(userId) {
 }
 app.get("/api/profile/:userId", async (req, res) => {
   const auth = req.headers.authorization;
-  if (!auth || auth !== `Bearer ${process.env.INTERNAL_API_KEY}`) {
+  if (!auth || auth !== `Bearer ${process.env.PROFILE_API_KEY}`) {
     return res.status(403).json({ error: "Access Denied" });
   }
   const userId = parseInt(req.params.userId, 10);

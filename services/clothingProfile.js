@@ -6,7 +6,7 @@ async function fetchClothingProfile(userId) {
   const url = `${process.env.PROFILE_API_URL}/${userId}`;
   const res = await fetch(url, {
     headers: {
-      Authorization: `Bearer ${process.env.PROFILE_API_KEY}` // oder was auch immer du meinst
+      Authorization: `Bearer ${process.env.PROFILE_API_KEY}`
     }
   })
   if (!res.ok) {
