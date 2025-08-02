@@ -1,4 +1,4 @@
-class clothingProfileTypes {
+class ClothingProfileTypes {
   constructor(data) {
     this.user_id = data.user_id;
     this.shoes = {

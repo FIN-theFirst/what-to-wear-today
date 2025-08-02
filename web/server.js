@@ -72,17 +72,13 @@ app.get("/", requireLogin, async (req, res) => {
   const userId = req.session.userId;
   let data = {};
   try {
-    const result = await db.query(
-      "SELECT * FROM clothing_profile WHERE user_id = $1 LIMIT 1",
-      [userId]
-    );
+    const result = getClothingProfileByUserId(userId);
     if (result.rows.length > 0) {
       data = result.rows[0];
     }
   } catch (err) {
     console.error("Error while loading", err);
   }
-
   res.render("index", data);
 });
 
@@ -110,7 +106,6 @@ app.post("/save-profile", requireLogin, async (req, res) => {
 
   try {
     await db.query("DELETE FROM clothing_profile WHERE user_id = $1", [userId]);
-
     await db.query(
       `
       INSERT INTO clothing_profile (
@@ -127,13 +122,19 @@ app.post("/save-profile", requireLogin, async (req, res) => {
       `,
       [userId, ...Object.values(profile)]
     );
-
     res.redirect("/");
   } catch (err) {
     console.error("Error while Saving", err);
     res.status(500).send("❌ Error while Saving");
   }
 });
+async function getClothingProfileByUserId(userId) {
+  const result = await db.query(
+    "SELECT * FROM clothing_profile WHERE user_id = $1",
+    [userId]
+  );
+  return result;
+}
 app.get("/api/profile/:userId", async (req, res) => {
   const auth = req.headers.authorization;
   if (!auth || auth !== `Bearer ${process.env.INTERNAL_API_KEY}`) {
@@ -141,10 +142,7 @@ app.get("/api/profile/:userId", async (req, res) => {
   }
   const userId = parseInt(req.params.userId, 10);
   try {
-    const result = await db.query(
-      "SELECT * FROM clothing_profile WHERE user_id = $1",
-      [userId]
-    );
+    const result = getClothingProfileByUserId(userId);
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "Profile not Found" })
     }

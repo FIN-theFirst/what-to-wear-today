@@ -15,5 +15,5 @@ yarn-error.log*
 *.swo
 
 # Alte JSON-Daten (wenn nicht produktiv genutzt)
-web/userProfile.json
+Todo.txt
 
